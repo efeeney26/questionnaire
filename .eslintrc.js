@@ -30,7 +30,8 @@ module.exports = {
     'react/jsx-indent-props': ['warn', 4],
     semi: "off",
     "@typescript-eslint/semi": ['warn', 'never'],
-    quotes: ['warn', 'single', {
+    quotes: 'off',
+    "@typescript-eslint/quotes": ['warn', 'single', {
       avoidEscape: true, allowTemplateLiterals: false
     }],
     'jsx-quotes': ['warn', 'prefer-double'],
