@@ -1,5 +1,6 @@
 import React from 'react'
 
+import Questionnaire from './features/questionnaire/questionnaire'
 import logo from './logo.svg'
 import './App.css'
 
@@ -27,6 +28,7 @@ function App() {
                 >
                     Learn React
                 </a>
+                <Questionnaire />
             </header>
         </div>
     )
