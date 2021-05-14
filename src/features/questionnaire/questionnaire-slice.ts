@@ -2,14 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import axiosInstance from '../../app/axios'
 
-// Define a type for the slice state
 interface QuestionnaireState {
     questionnaireData: Array<object> | null,
     status: 'isLoading' | 'isSuccess' | 'isError'
     currentQuestionNumber: number
 }
 
-// Define the initial state using that type
 const initialState: QuestionnaireState = {
     questionnaireData: null,
     status: 'isSuccess',
@@ -26,7 +24,6 @@ export const fetchQuestionnaire = createAsyncThunk('questionnaire/fetch', async 
 
 export const questionnaireSlice = createSlice({
     name: 'questionnaire',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
         incrementQuestionNumber: (state) => {

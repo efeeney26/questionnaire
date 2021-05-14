@@ -8,13 +8,13 @@ const Questionnaire = () => {
     const currentQuestion = useAppSelector((state) => state.questionnaire.currentQuestionNumber)
     const dispatch = useAppDispatch()
 
-    const handleIncClick = useCallback((): void => {
+    const handleIncClick = useCallback(() => {
         dispatch(incrementQuestionNumber())
-    }, [])
+    }, [dispatch])
 
     const handleTestClick = useCallback(() => {
         dispatch(fetchQuestionnaire())
-    }, [])
+    }, [dispatch])
 
     return (
         <div>

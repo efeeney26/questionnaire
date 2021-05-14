@@ -113,5 +113,6 @@ module.exports = {
     }],
     'linebreak-style': 'off',
     'max-len': ['warn', { code: 120 }],
+    "react/prop-types" : [0]
   },
 };
