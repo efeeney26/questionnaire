@@ -1,15 +1,16 @@
 import React from 'react'
 
-import { Layout } from './components'
+import {
+    Layout
+} from './components'
+import { Questionnaire } from './features'
 
 function App() {
     return (
         <Layout
             title="Опросник"
         >
-            <div>
-                Hello
-            </div>
+            <Questionnaire />
         </Layout>
     )
 }

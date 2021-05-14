@@ -6,6 +6,15 @@ const Input = styled.input`
   background: papayawhip;
   border: none;
   border-radius: 3px;
+  min-width: 300px;
+  ::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  ::-webkit-outer-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `
 
 export default Input

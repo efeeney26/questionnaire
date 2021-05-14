@@ -4,18 +4,20 @@ import axiosInstance from '../../app/axios'
 
 interface QuestionnaireState {
     questionnaireData: Array<object> | null,
-    status: 'isLoading' | 'isSuccess' | 'isError'
+    status: 'isPending' | 'isLoading' | 'isSuccess' | 'isError'
     currentQuestionNumber: number
 }
 
 const initialState: QuestionnaireState = {
     questionnaireData: null,
-    status: 'isSuccess',
+    status: 'isPending',
     currentQuestionNumber: 0
 }
 
-export const fetchQuestionnaire = createAsyncThunk('questionnaire/fetch', async () => {
-    const response: { data: { results: Array<object>, response_code: number } } = await axiosInstance.get('')
+export const fetchQuestionnaire = createAsyncThunk('questionnaire/fetch', async (count: number) => {
+    const response:
+    { data: { results: Array<object>, response_code: number } } =
+        await axiosInstance.get(`?amount=${count}`)
     if (response?.data?.response_code === 0) {
         return response?.data?.results
     }
