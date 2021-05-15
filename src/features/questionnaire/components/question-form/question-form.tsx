@@ -1,7 +1,13 @@
 import React, { FC, useMemo, useState } from 'react'
 import { shuffle } from 'lodash'
 
-import { Checkbox } from '../../../../components'
+import { Checkbox, Radio } from '../../../../components'
+
+type OnChangeType = {
+    target: {
+        value: string
+    }
+}
 
 interface IQuestionFormProps {
     question?: {
@@ -36,14 +42,28 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question }) => {
                     <div
                         key={answer}
                     >
-                        <Checkbox
-                            id={answer}
-                            name={answer}
-                            label={answer}
-                            checked={value}
-                            onChange={() => setCheckbox(!value)}
-                            disabled={false}
-                        />
+                        {question?.type === 'multiple' ?
+                            <Checkbox
+                                id={answer}
+                                name={answer}
+                                label={answer}
+                                value={answer}
+                                checked={value}
+                                onChange={() => setCheckbox(!value)}
+                                disabled={false}
+                            /> :
+                            <Radio
+                                id={answer}
+                                name={question?.question}
+                                label={answer}
+                                value={answer}
+                                checked={radioValue}
+                                onChange={({ target } : OnChangeType) => {
+                                    setRadio(Boolean(target.value))
+                                }}
+                                disabled={false}
+                            />
+                        }
                     </div>
                 )) : null
             }

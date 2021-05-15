@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled, { keyframes } from 'styled-components'
 
-interface ICheckboxProps {
+interface IRadioProps {
     checked: boolean,
     onChange: any,
     name?: string,
@@ -11,45 +11,41 @@ interface ICheckboxProps {
     value: string
 }
 
-const StyledInput = styled.input`
+const Input = styled.input`
   height: 0;
   width: 0;
   opacity: 0;
   z-index: -1;
 `
 
-const StyledLabel = styled.label`
+const popIn = keyframes`
+from {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.5) ;
+}
+to {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) ;
+}
+`
+
+const Label = styled.label`
   position: relative;
   display: inline-block;
   margin: 0.6em 1em;
-`
-
-const rotate = keyframes`
- from {
-    opacity: 0;
-    transform: rotate(0deg);
-  }
-  to {
-    opacity: 1;
-    transform: rotate(45deg);
-  }
+  font-size: 24px;
 `
 
 const Indicator = styled.div`
+  border: 1px solid;
+  border-radius: 1em;
   width: 1.2em;
   height: 1.2em;
-  background: #e6e6e6;
   position: absolute;
   top: 0;
-  left: -1.6em;
-  border: 1px solid #757575;
-  border-radius: 0.2em;
+  left: -1.5em;
 
-  ${StyledInput}:not(:disabled):checked & {
-    background: #d1d1d1;
-  }
-
-  ${StyledLabel}:hover & {
+  ${Label}:hover & {
     background: #ccc;
   }
 
@@ -59,48 +55,53 @@ const Indicator = styled.div`
     display: none;
   }
 
-  ${StyledInput}:checked + &::after {
+  ${Input}:checked + &::after {
     display: block;
-    top: 0.1em;
-    left: 0.35em;
-    width: 35%;
-    height: 70%;
     border: solid #263238;
-    border-width: 0 0.2em 0.2em 0;
-    animation-name: ${rotate};
+    border-radius: 1em;
+    background-color: #263238;
+    width: 0.5em;
+    height: 0.5em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-name: ${popIn};
     animation-duration: 0.3s;
     animation-fill-mode: forwards;
   }
 
-  &:disabled {
-    cursor: not-allowed;
+  ${Input}:disabled + & {
+    pointer-events: none;
+    opacity: 0.6;
+    background: #e6e6e6;
   }
 `
 
-const Checkbox: FC<ICheckboxProps> = ({
-    checked,
+const Radio: FC<IRadioProps> = ({
     onChange,
     name,
     id,
     label,
     disabled,
+    checked,
     value
 }) => (
-    <StyledLabel
+    <Label
         htmlFor={id}
     >
         {label}
-        <StyledInput
+        <Input
             id={id}
-            type="checkbox"
+            type="radio"
+            role="radio"
             name={name}
-            disabled={disabled}
-            checked={checked}
-            onChange={onChange}
             value={value}
+            disabled={disabled}
+            onChange={onChange}
+            checked={checked}
         />
         <Indicator />
-    </StyledLabel>
+    </Label>
 )
 
-export default Checkbox
+export default Radio
