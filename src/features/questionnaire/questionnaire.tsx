@@ -41,6 +41,8 @@ const Questionnaire = () => {
             {questionnaire.status === 'isPending' &&
                 <div>
                     <Input
+                        id="input"
+                        label="Количество вопросов"
                         type="number"
                         defaultValue={DEFAULT_INPUT_VALUE}
                         placeholder="Введите значение"

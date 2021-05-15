@@ -1,5 +1,7 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import { shuffle } from 'lodash'
+
+import { Checkbox } from '../../../../components'
 
 interface IQuestionFormProps {
     question?: {
@@ -13,6 +15,9 @@ interface IQuestionFormProps {
 }
 
 const QuestionForm: FC<IQuestionFormProps> = ({ question }) => {
+    const [value, setCheckbox] = useState(true)
+    const [radioValue, setRadio] = useState(true)
+
     const answers: Array<string> | null = useMemo(() => {
         if (question?.incorrect_answers && question?.correct_answer) {
             return shuffle([
@@ -28,11 +33,18 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question }) => {
             <p>{question?.question}</p>
             {answers?.length ?
                 answers.map((answer) => (
-                    <p
+                    <div
                         key={answer}
                     >
-                        {answer}
-                    </p>
+                        <Checkbox
+                            id={answer}
+                            name={answer}
+                            label={answer}
+                            checked={value}
+                            onChange={() => setCheckbox(!value)}
+                            disabled={false}
+                        />
+                    </div>
                 )) : null
             }
         </>
