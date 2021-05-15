@@ -3,18 +3,22 @@ import React, { useCallback, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { Button, Input, Spinner } from '../../components'
 
-import { incrementQuestionNumber, fetchQuestionnaire } from './questionnaire-slice'
+import { QuestionForm } from './components'
+import {
+    incrementQuestionNumber,
+    decrementQuestionNumber,
+    fetchQuestionnaire,
+    selectCurrentQuestionnaire
+} from './questionnaire-slice'
 
+const DEFAULT_INPUT_VALUE = 3
 
 const Questionnaire = () => {
     const questionnaire = useAppSelector((state) => state.questionnaire)
+    const currentQuestionnaire = useAppSelector(selectCurrentQuestionnaire)
     const dispatch = useAppDispatch()
 
-    const [inputValue, setInputValue] = useState<number>(3)
-
-    const handleIncClick = useCallback(() => {
-        dispatch(incrementQuestionNumber())
-    }, [dispatch])
+    const [inputValue, setInputValue] = useState<number>(DEFAULT_INPUT_VALUE)
 
     const handleInputChange = useCallback((e) => {
         setInputValue(e.target.value)
@@ -24,13 +28,21 @@ const Questionnaire = () => {
         dispatch(fetchQuestionnaire(inputValue))
     }, [dispatch, inputValue])
 
+    const handleNextButtonClick = useCallback(() => {
+        dispatch(incrementQuestionNumber())
+    }, [dispatch])
+
+    const handleRollbackButtonClick = useCallback(() => {
+        dispatch(decrementQuestionNumber())
+    }, [dispatch])
+
     return (
         <>
             {questionnaire.status === 'isPending' &&
                 <div>
                     <Input
                         type="number"
-                        defaultValue={3}
+                        defaultValue={DEFAULT_INPUT_VALUE}
                         placeholder="Введите значение"
                         onChange={handleInputChange}
                     />
@@ -47,7 +59,20 @@ const Questionnaire = () => {
             }
             {questionnaire.status === 'isSuccess' &&
                 <div>
-                    Hello
+                    <QuestionForm
+                        question={currentQuestionnaire}
+                    />
+                    <Button
+                        disabled={questionnaire.currentQuestionNumber === 0}
+                        onClick={handleRollbackButtonClick}
+                    >
+                        Назад
+                    </Button>
+                    <Button
+                        onClick={handleNextButtonClick}
+                    >
+                        Продолжить
+                    </Button>
                 </div>
             }
             {questionnaire.status === 'isError' &&

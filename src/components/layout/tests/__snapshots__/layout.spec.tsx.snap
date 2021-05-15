@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout should render properly with title and children 1`] = `
+<styled.div>
+  <styled.h1>
+    title
+  </styled.h1>
+  kek
+</styled.div>
+`;

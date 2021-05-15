@@ -1,5 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 
+// eslint-disable-next-line import/no-cycle
+import { RootState } from '../../app/store'
 import axiosInstance from '../../app/axios'
 
 interface QuestionnaireState {
@@ -51,5 +53,12 @@ export const questionnaireSlice = createSlice({
 })
 
 export const { incrementQuestionNumber, decrementQuestionNumber } = questionnaireSlice.actions
+
+export const selectCurrentQuestionnaire = createSelector(
+    (state: RootState) => state.questionnaire.questionnaireData,
+    (state: RootState) => state.questionnaire.currentQuestionNumber,
+    (items, count) => items?.[count]
+)
+
 
 export default questionnaireSlice.reducer
