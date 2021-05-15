@@ -36,6 +36,10 @@ const Questionnaire = () => {
         dispatch(decrementQuestionNumber())
     }, [dispatch])
 
+    const handleReloadButtonClick = useCallback(() => {
+        window.location.reload()
+    }, [])
+
     return (
         <>
             {questionnaire.status === 'isPending' &&
@@ -60,6 +64,7 @@ const Questionnaire = () => {
                 <Spinner />
             }
             {questionnaire.status === 'isSuccess' &&
+            questionnaire?.currentQuestionNumber !== questionnaire?.questionnaireData?.length &&
                 <div>
                     <QuestionForm
                         question={currentQuestionnaire}
@@ -79,6 +84,16 @@ const Questionnaire = () => {
             }
             {questionnaire.status === 'isError' &&
                 <p>Упс, что-то пошло не так</p>
+            }
+            {questionnaire?.currentQuestionNumber === questionnaire?.questionnaireData?.length &&
+                <>
+                    <h1>Молодцом</h1>
+                    <Button
+                        onClick={handleReloadButtonClick}
+                    >
+                        Попробовать еще раз!
+                    </Button>
+                </>
             }
         </>
     )
