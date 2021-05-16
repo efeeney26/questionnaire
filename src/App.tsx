@@ -1,17 +1,20 @@
 import React from 'react'
 
 import {
-    Layout
+    Layout,
+    Background
 } from './components'
 import { Questionnaire } from './features'
 
 function App() {
     return (
-        <Layout
-            title="Опросник"
-        >
-            <Questionnaire />
-        </Layout>
+        <Background>
+            <Layout
+                title="Опросник"
+            >
+                <Questionnaire />
+            </Layout>
+        </Background>
     )
 }
 

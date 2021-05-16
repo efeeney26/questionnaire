@@ -4,6 +4,7 @@ import Checkbox from './checkbox/checkbox'
 import Radio from './radio/radio'
 import Button from './button/button'
 import Spinner from './spinner/spinner'
+import Background from './background/background'
 
 export {
     Layout,
@@ -11,5 +12,6 @@ export {
     Checkbox,
     Radio,
     Button,
-    Spinner
+    Spinner,
+    Background
 }
