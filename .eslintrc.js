@@ -8,7 +8,8 @@ module.exports = {
     'react-app/jest',
     'plugin:react/recommended',
     'airbnb',
-    'airbnb-typescript'
+    'airbnb-typescript',
+    'plugin:cypress/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -21,7 +22,8 @@ module.exports = {
   },
   plugins: [
     'react',
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'cypress'
   ],
   rules: {
     indent: "off",

@@ -38,7 +38,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "CI=true react-scripts test --coverage",
-    "cy:test": "npx cypress open",
+    "cy:open": "npx cypress open",
     "eject": "react-scripts eject",
     "eslint": "npx eslint --ext .js,.jsx,.ts,.tsx .",
     "eslint:fix": "npx eslint --ext .js,.jsx,.ts,.tsx . --fix"
@@ -67,6 +67,7 @@
     "eslint": "^7.26.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.2",
