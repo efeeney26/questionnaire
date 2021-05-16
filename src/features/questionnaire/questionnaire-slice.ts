@@ -5,7 +5,7 @@ import { RootState } from '../../app/store'
 import axiosInstance from '../../app/axios'
 
 interface QuestionnaireState {
-    questionnaireData: Array<object> | null,
+    questionnaireData: Array<{ answer: null | string }> | null,
     status: 'isPending' | 'isLoading' | 'isSuccess' | 'isError'
     currentQuestionNumber: number
 }
@@ -20,8 +20,11 @@ export const fetchQuestionnaire = createAsyncThunk('questionnaire/fetch', async 
     const response:
     { data: { results: Array<object>, response_code: number } } =
         await axiosInstance.get(`?amount=${count}&type=boolean`)
-    if (response?.data?.response_code === 0) {
-        return response?.data?.results
+    if (response?.data?.response_code === 0 && response?.data?.results?.length) {
+        return response.data.results.map((res) => ({
+            ...res,
+            answer: null
+        }))
     }
     throw new Error()
 })
@@ -35,6 +38,10 @@ export const questionnaireSlice = createSlice({
         },
         decrementQuestionNumber: (state) => {
             state.currentQuestionNumber -= 1
+        },
+        setAnswer: (state, action) => {
+            // @ts-ignore
+            state.questionnaireData[state.currentQuestionNumber].answer = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -52,7 +59,7 @@ export const questionnaireSlice = createSlice({
     }
 })
 
-export const { incrementQuestionNumber, decrementQuestionNumber } = questionnaireSlice.actions
+export const { incrementQuestionNumber, decrementQuestionNumber, setAnswer } = questionnaireSlice.actions
 
 export const selectCurrentQuestionnaire = createSelector(
     (state: RootState) => state.questionnaire.questionnaireData,

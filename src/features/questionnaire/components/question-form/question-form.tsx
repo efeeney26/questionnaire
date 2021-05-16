@@ -1,13 +1,9 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import { shuffle } from 'lodash'
 
-import { Checkbox, Radio } from '../../../../components'
-
-type OnChangeType = {
-    target: {
-        value: string
-    }
-}
+import { useAppDispatch } from '../../../../app/hooks'
+import { Checkbox, Radio, Button } from '../../../../components'
+import { decrementQuestionNumber, incrementQuestionNumber, setAnswer } from '../../questionnaire-slice'
 
 interface IQuestionFormProps {
     question?: {
@@ -16,13 +12,14 @@ interface IQuestionFormProps {
         difficulty?: string,
         question?: string,
         incorrect_answers?: Array<string>,
-        type?: 'multiple' | string
-    }
+        type?: 'multiple' | 'boolean',
+        answer: any
+    },
+    questionNumber: number
 }
 
-const QuestionForm: FC<IQuestionFormProps> = ({ question }) => {
-    const [value, setCheckbox] = useState(true)
-    const [radioValue, setRadio] = useState(true)
+const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
+    const dispatch = useAppDispatch()
 
     const answers: Array<string> | null = useMemo(() => {
         if (question?.incorrect_answers && question?.correct_answer) {
@@ -33,6 +30,22 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question }) => {
         }
         return null
     }, [question?.incorrect_answers, question?.correct_answer])
+
+    const [value, setCheckbox] = useState(true)
+    const [radioValue, setRadio] = useState(question?.answer || answers?.[0])
+
+    const handleRadioChange = useCallback((val) => () => {
+        setRadio(val)
+    }, [])
+
+    const handleNextButtonClick = useCallback(() => {
+        dispatch(setAnswer(radioValue))
+        dispatch(incrementQuestionNumber())
+    }, [dispatch, radioValue])
+
+    const handleRollbackButtonClick = useCallback(() => {
+        dispatch(decrementQuestionNumber())
+    }, [dispatch])
 
     return (
         <>
@@ -57,16 +70,24 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question }) => {
                                 name={question?.question}
                                 label={answer}
                                 value={answer}
-                                checked={radioValue}
-                                onChange={({ target } : OnChangeType) => {
-                                    setRadio(Boolean(target.value))
-                                }}
-                                disabled={false}
+                                checked={radioValue === answer}
+                                onChange={handleRadioChange(answer)}
                             />
                         }
                     </div>
                 )) : null
             }
+            <Button
+                disabled={questionNumber === 0}
+                onClick={handleRollbackButtonClick}
+            >
+                Назад
+            </Button>
+            <Button
+                onClick={handleNextButtonClick}
+            >
+                Продолжить
+            </Button>
         </>
     )
 }

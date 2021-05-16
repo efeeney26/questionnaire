@@ -7,7 +7,6 @@ interface IRadioProps {
     name?: string,
     id: string,
     label?: string,
-    disabled: boolean,
     value: string
 }
 
@@ -82,7 +81,6 @@ const Radio: FC<IRadioProps> = ({
     name,
     id,
     label,
-    disabled,
     checked,
     value
 }) => (
@@ -96,7 +94,6 @@ const Radio: FC<IRadioProps> = ({
             role="radio"
             name={name}
             value={value}
-            disabled={disabled}
             onChange={onChange}
             checked={checked}
         />

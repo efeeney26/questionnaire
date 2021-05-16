@@ -5,8 +5,6 @@ import { Button, Input, Spinner } from '../../components'
 
 import { QuestionForm } from './components'
 import {
-    incrementQuestionNumber,
-    decrementQuestionNumber,
     fetchQuestionnaire,
     selectCurrentQuestionnaire
 } from './questionnaire-slice'
@@ -27,14 +25,6 @@ const Questionnaire = () => {
     const handleStartButtonClick = useCallback(() => {
         dispatch(fetchQuestionnaire(inputValue))
     }, [dispatch, inputValue])
-
-    const handleNextButtonClick = useCallback(() => {
-        dispatch(incrementQuestionNumber())
-    }, [dispatch])
-
-    const handleRollbackButtonClick = useCallback(() => {
-        dispatch(decrementQuestionNumber())
-    }, [dispatch])
 
     const handleReloadButtonClick = useCallback(() => {
         window.location.reload()
@@ -68,18 +58,8 @@ const Questionnaire = () => {
                 <div>
                     <QuestionForm
                         question={currentQuestionnaire}
+                        questionNumber={questionnaire?.currentQuestionNumber}
                     />
-                    <Button
-                        disabled={questionnaire.currentQuestionNumber === 0}
-                        onClick={handleRollbackButtonClick}
-                    >
-                        Назад
-                    </Button>
-                    <Button
-                        onClick={handleNextButtonClick}
-                    >
-                        Продолжить
-                    </Button>
                 </div>
             }
             {questionnaire.status === 'isError' &&
