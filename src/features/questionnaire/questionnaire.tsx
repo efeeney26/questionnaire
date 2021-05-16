@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { groupBy } from 'lodash'
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { Button, Input, Spinner } from '../../components'
@@ -10,11 +11,19 @@ import {
 } from './questionnaire-slice'
 
 const DEFAULT_INPUT_VALUE = 3
+const DIFF_MAP = {
+    easy: 'Легкие',
+    medium: 'Средние',
+    hard: 'Сложные'
+}
 
 const Questionnaire = () => {
     const questionnaire = useAppSelector((state) => state.questionnaire)
     const currentQuestionnaire = useAppSelector(selectCurrentQuestionnaire)
     const dispatch = useAppDispatch()
+
+    const groupedDifficultyAnswers = useMemo(() => groupBy(questionnaire.questionnaireData, 'difficulty'),
+        [questionnaire.questionnaireData])
 
     const [inputValue, setInputValue] = useState<number>(DEFAULT_INPUT_VALUE)
 
@@ -72,6 +81,18 @@ const Questionnaire = () => {
             {questionnaire.currentQuestionNumber === questionnaire.questionnaireData?.length &&
                 <>
                     <h1>Молодцом</h1>
+                    <p>
+                        {`Всего вопросов - ${questionnaire.questionnaireData?.length}`}
+                    </p>
+                    {Object.entries(groupedDifficultyAnswers).map((item) => (
+                        <div
+                            key={item[0]}
+                        >
+                            {/* @ts-ignore*/}
+                            <h3>{DIFF_MAP[item[0]]}</h3>
+                            <p>{`Кол-во вопросов - ${item[1].length}`}</p>
+                        </div>
+                    ))}
                     <Button
                         onClick={handleReloadButtonClick}
                     >
