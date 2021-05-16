@@ -33,7 +33,7 @@ const StyledLabel = styled.label`
 const StyledP = styled.p`
   margin: 0;
   font-size: 1.1rem;
-  color: darkgray;
+  color: black;
 `
 
 const Input: FC<IInputProps> = ({

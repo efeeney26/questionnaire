@@ -54,6 +54,7 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
 
     const [checkboxState, setCheckboxState] = useState<ICheckboxState | null>(checkedItems)
     const [radioValue, setRadio] = useState(question?.answer || answerOptions?.[0])
+    const [error, setError] = useState<string>()
 
     const selectedAnswerOptions = useMemo(() => checkboxState && Object
         .keys(checkboxState)
@@ -63,6 +64,12 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
     useEffect(() => {
         setCheckboxState(checkedItems)
     }, [checkedItems])
+
+    useEffect(() => {
+        if (selectedAnswerOptions?.length) {
+            setError('')
+        }
+    }, [selectedAnswerOptions?.length])
 
     const handleCheckboxChange = useCallback(({ target }) => {
         setCheckboxState((state) => ({
@@ -77,6 +84,10 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
 
     const handleNextButtonClick = useCallback(() => {
         const answer = question?.type === 'multiple' ? selectedAnswerOptions : radioValue
+        if (question?.type === 'multiple' && !selectedAnswerOptions?.length) {
+            setError('Надо что-то выбрать')
+            return
+        }
         dispatch(setAnswer(answer))
         dispatch(incrementQuestionNumber())
     }, [dispatch, question?.type, radioValue, selectedAnswerOptions])
@@ -113,6 +124,13 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
                         }
                     </div>
                 )) : null
+            }
+            {error &&
+                <p
+                    style={{ color: 'red' }}
+                >
+                    {error}
+                </p>
             }
             <Button
                 disabled={questionNumber === 0}
