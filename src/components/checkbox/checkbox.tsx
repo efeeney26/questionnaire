@@ -7,7 +7,6 @@ interface ICheckboxProps {
     name?: string,
     id: string,
     label?: string,
-    disabled: boolean,
     value: string
 }
 
@@ -83,7 +82,6 @@ const Checkbox: FC<ICheckboxProps> = ({
     name,
     id,
     label,
-    disabled,
     value
 }) => (
     <StyledLabel
@@ -94,7 +92,6 @@ const Checkbox: FC<ICheckboxProps> = ({
             id={id}
             type="checkbox"
             name={name}
-            disabled={disabled}
             checked={checked}
             onChange={onChange}
             value={value}

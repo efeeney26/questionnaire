@@ -1,5 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
-import { shuffle } from 'lodash'
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useAppDispatch } from '../../../../app/hooks'
 import { Checkbox, Radio, Button } from '../../../../components'
@@ -18,7 +17,11 @@ interface IQuestionFormProps {
     questionNumber: number
 }
 
-const setSequence = (correctAnswer: string, incorrectAnswers: Array<string>): Array<string> => {
+interface ICheckboxState {
+    [x: string]: any
+}
+
+const setAnswersSequence = (correctAnswer: string, incorrectAnswers: Array<string>): Array<string> => {
     if (correctAnswer === 'True') {
         return [
             correctAnswer,
@@ -34,27 +37,49 @@ const setSequence = (correctAnswer: string, incorrectAnswers: Array<string>): Ar
 const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
     const dispatch = useAppDispatch()
 
-    const answers: Array<string> | null = useMemo(() => {
+    const answerOptions: Array<string> | null = useMemo(() => {
         if (question?.incorrect_answers && question?.correct_answer) {
-            return question?.type === 'multiple' ? shuffle([
+            return question?.type === 'multiple' ? [
                 ...question?.incorrect_answers,
                 question?.correct_answer
-            ]) : setSequence(question.correct_answer, question.incorrect_answers)
+            ] : setAnswersSequence(question.correct_answer, question.incorrect_answers)
         }
         return null
     }, [question?.incorrect_answers, question?.correct_answer, question?.type])
 
-    const [value, setCheckbox] = useState(true)
-    const [radioValue, setRadio] = useState(question?.answer || answers?.[0])
+    const checkedItems = useMemo(() => answerOptions && answerOptions.reduce((acc, answer) => ({
+        ...acc,
+        [answer]: question?.answer ? question?.answer.includes(answer) : false
+    }), {}), [answerOptions, question?.answer])
+
+    const [checkboxState, setCheckboxState] = useState<ICheckboxState | null>(checkedItems)
+    const [radioValue, setRadio] = useState(question?.answer || answerOptions?.[0])
+
+    const selectedAnswerOptions = useMemo(() => checkboxState && Object
+        .keys(checkboxState)
+        .filter((key) => checkboxState[key]),
+    [checkboxState])
+
+    useEffect(() => {
+        setCheckboxState(checkedItems)
+    }, [checkedItems])
+
+    const handleCheckboxChange = useCallback(({ target }) => {
+        setCheckboxState((state) => ({
+            ...state,
+            [target.name]: target.checked
+        }))
+    }, [])
 
     const handleRadioChange = useCallback(({ target }) => {
         setRadio(target.value)
     }, [])
 
     const handleNextButtonClick = useCallback(() => {
-        dispatch(setAnswer(radioValue))
+        const answer = question?.type === 'multiple' ? selectedAnswerOptions : radioValue
+        dispatch(setAnswer(answer))
         dispatch(incrementQuestionNumber())
-    }, [dispatch, radioValue])
+    }, [dispatch, question?.type, radioValue, selectedAnswerOptions])
 
     const handleRollbackButtonClick = useCallback(() => {
         dispatch(decrementQuestionNumber())
@@ -63,27 +88,26 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
     return (
         <>
             <p>{question?.question}</p>
-            {answers?.length ?
-                answers.map((answer) => (
+            {answerOptions?.length ?
+                answerOptions.map((answerOption) => (
                     <div
-                        key={answer}
+                        key={answerOption}
                     >
                         {question?.type === 'multiple' ?
                             <Checkbox
-                                id={answer}
-                                name={answer}
-                                label={answer}
-                                value={answer}
-                                checked={value}
-                                onChange={() => setCheckbox(!value)}
-                                disabled={false}
+                                id={answerOption}
+                                name={answerOption}
+                                label={answerOption}
+                                checked={checkboxState?.[answerOption]}
+                                onChange={handleCheckboxChange}
+                                value={answerOption}
                             /> :
                             <Radio
-                                id={answer}
+                                id={answerOption}
                                 name={question?.question}
-                                label={answer}
-                                value={answer}
-                                checked={radioValue === answer}
+                                label={answerOption}
+                                value={answerOption}
+                                checked={radioValue === answerOption}
                                 onChange={handleRadioChange}
                             />
                         }
