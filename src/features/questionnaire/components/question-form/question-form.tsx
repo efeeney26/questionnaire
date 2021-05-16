@@ -18,18 +18,31 @@ interface IQuestionFormProps {
     questionNumber: number
 }
 
+const setSequence = (correctAnswer: string, incorrectAnswers: Array<string>): Array<string> => {
+    if (correctAnswer === 'True') {
+        return [
+            correctAnswer,
+            ...incorrectAnswers
+        ]
+    }
+    return [
+        ...incorrectAnswers,
+        correctAnswer
+    ]
+}
+
 const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
     const dispatch = useAppDispatch()
 
     const answers: Array<string> | null = useMemo(() => {
         if (question?.incorrect_answers && question?.correct_answer) {
-            return shuffle([
+            return question?.type === 'multiple' ? shuffle([
                 ...question?.incorrect_answers,
                 question?.correct_answer
-            ])
+            ]) : setSequence(question.correct_answer, question.incorrect_answers)
         }
         return null
-    }, [question?.incorrect_answers, question?.correct_answer])
+    }, [question?.incorrect_answers, question?.correct_answer, question?.type])
 
     const [value, setCheckbox] = useState(true)
     const [radioValue, setRadio] = useState(question?.answer || answers?.[0])
