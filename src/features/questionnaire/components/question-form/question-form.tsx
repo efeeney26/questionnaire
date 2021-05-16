@@ -99,7 +99,7 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
             <Button
                 onClick={handleNextButtonClick}
             >
-                Продолжить
+                Ответить
             </Button>
         </>
     )

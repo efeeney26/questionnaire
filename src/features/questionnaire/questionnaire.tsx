@@ -50,15 +50,15 @@ const Questionnaire = () => {
                     </Button>
                 </div>
             }
-            {questionnaire?.status === 'isLoading' &&
+            {questionnaire.status === 'isLoading' &&
                 <Spinner />
             }
             {questionnaire.status === 'isSuccess' &&
-            questionnaire?.currentQuestionNumber !== questionnaire?.questionnaireData?.length &&
+            questionnaire.currentQuestionNumber !== questionnaire.questionnaireData?.length &&
                 <div>
                     <h3>
                         {/* eslint-disable-next-line max-len */}
-                        {`Вопрос ${questionnaire?.currentQuestionNumber + 1} из ${questionnaire?.questionnaireData?.length}`}
+                        {`Вопрос ${questionnaire.currentQuestionNumber + 1} из ${questionnaire.questionnaireData?.length}`}
                     </h3>
                     <QuestionForm
                         question={currentQuestionnaire}
@@ -69,7 +69,7 @@ const Questionnaire = () => {
             {questionnaire.status === 'isError' &&
                 <p>Упс, что-то пошло не так</p>
             }
-            {questionnaire?.currentQuestionNumber === questionnaire?.questionnaireData?.length &&
+            {questionnaire.currentQuestionNumber === questionnaire.questionnaireData?.length &&
                 <>
                     <h1>Молодцом</h1>
                     <Button

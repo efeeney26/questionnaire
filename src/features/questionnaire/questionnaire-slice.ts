@@ -40,8 +40,9 @@ export const questionnaireSlice = createSlice({
             state.currentQuestionNumber -= 1
         },
         setAnswer: (state, action) => {
-            // @ts-ignore
-            state.questionnaireData[state.currentQuestionNumber].answer = action.payload
+            if (state.questionnaireData) {
+                state.questionnaireData[state.currentQuestionNumber].answer = action.payload
+            }
         }
     },
     extraReducers: (builder) => {
