@@ -19,7 +19,7 @@ const initialState: QuestionnaireState = {
 export const fetchQuestionnaire = createAsyncThunk('questionnaire/fetch', async (count: number) => {
     const response:
     { data: { results: Array<object>, response_code: number } } =
-        await axiosInstance.get(`?amount=${count}&type=boolean`)
+        await axiosInstance.get(`?amount=${count}&type=multiple`)
     if (response?.data?.response_code === 0 && response?.data?.results?.length) {
         return response.data.results.map((res) => ({
             ...res,

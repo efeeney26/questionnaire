@@ -84,15 +84,26 @@ const Questionnaire = () => {
                     <p>
                         {`Всего вопросов - ${questionnaire.questionnaireData?.length}`}
                     </p>
-                    {Object.entries(groupedDifficultyAnswers).map((item) => (
-                        <div
-                            key={item[0]}
-                        >
-                            {/* @ts-ignore*/}
-                            <h3>{DIFF_MAP[item[0]]}</h3>
-                            <p>{`Кол-во вопросов - ${item[1].length}`}</p>
-                        </div>
-                    ))}
+                    {Object.entries(groupedDifficultyAnswers).map((item) => {
+                        const itemsWithCorrectAnswers = item[1].filter((iwca) => {
+                            if (typeof iwca.answer === 'string') {
+                                // @ts-ignore
+                                return iwca.answer === iwca.correct_answer
+                            }
+                            // @ts-ignore
+                            return iwca?.answer.includes(iwca.correct_answer)
+                        })
+                        return (
+                            <div
+                                key={item[0]}
+                            >
+                                {/* @ts-ignore*/}
+                                <h3>{DIFF_MAP[item[0]]}</h3>
+                                <p>{`Кол-во вопросов - ${item[1].length}`}</p>
+                                <p>{`Кол-во правильных ответов - ${itemsWithCorrectAnswers.length}`}</p>
+                            </div>
+                        )
+                    })}
                     <Button
                         onClick={handleReloadButtonClick}
                     >
