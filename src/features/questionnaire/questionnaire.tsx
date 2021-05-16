@@ -56,6 +56,10 @@ const Questionnaire = () => {
             {questionnaire.status === 'isSuccess' &&
             questionnaire?.currentQuestionNumber !== questionnaire?.questionnaireData?.length &&
                 <div>
+                    <h3>
+                        {/* eslint-disable-next-line max-len */}
+                        {`Вопрос ${questionnaire?.currentQuestionNumber + 1} из ${questionnaire?.questionnaireData?.length}`}
+                    </h3>
                     <QuestionForm
                         question={currentQuestionnaire}
                         questionNumber={questionnaire?.currentQuestionNumber}

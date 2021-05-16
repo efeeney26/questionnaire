@@ -47,8 +47,8 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
     const [value, setCheckbox] = useState(true)
     const [radioValue, setRadio] = useState(question?.answer || answers?.[0])
 
-    const handleRadioChange = useCallback((val) => () => {
-        setRadio(val)
+    const handleRadioChange = useCallback(({ target }) => {
+        setRadio(target.value)
     }, [])
 
     const handleNextButtonClick = useCallback(() => {
@@ -84,7 +84,7 @@ const QuestionForm: FC<IQuestionFormProps> = ({ question, questionNumber }) => {
                                 label={answer}
                                 value={answer}
                                 checked={radioValue === answer}
-                                onChange={handleRadioChange(answer)}
+                                onChange={handleRadioChange}
                             />
                         }
                     </div>
